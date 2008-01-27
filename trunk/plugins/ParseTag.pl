@@ -1,5 +1,5 @@
 # ===========================================================================
-# Copyright 2006, Everitz Consulting (mt@everitz.com)
+# Copyright Everitz Consulting.  Not for redistribution.
 # ===========================================================================
 package MT::Plugin::ParseTag;
 
@@ -8,21 +8,24 @@ use strict;
 
 use MT;
 
-my $ParseTag;
-my $about = {
+our $ParseTag;
+MT->add_plugin($ParseTag = __PACKAGE__->new({
   name => 'MT-ParseTag',
   description => 'Processes the contents of a template tag.',
   author_name => 'Everitz Consulting',
   author_link => 'http://www.everitz.com/',
-  version => '0.0.6'
-};
-$ParseTag = MT::Plugin::ParseTag->new($about);
-MT->add_plugin($ParseTag);
-
-use MT::Template::Context;
-MT::Template::Context->add_container_tag(ParseTag => \&ParseTag);
-MT::Template::Context->add_tag(ParseTagContent => \&ReturnValue);
-MT::Template::Context->add_tag(ParseTagCounter => \&ReturnValue);
+  version => '0.1.0'
+#
+# tags
+#
+  container_tags => {
+    'ParseTag' => \&ParseTag
+  },
+  template_tags => {
+    'ParseTagContent' => \&ReturnValue,
+    'ParseTagCounter' => \&ReturnValue
+  }
+}));
 
 sub ParseTag {
   my ($ctx, $args) = @_;
